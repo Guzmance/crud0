@@ -25,9 +25,9 @@ function App() {
   });
 
   const seleccionProducto=(elemento, caso)=>{
-    setProductoSeleccionado(elemento);
-    (caso==='Editar')?setModalEditar(true):setModalEliminar(true)
-    }
+setProductoSeleccionado(elemento);
+(caso==='Editar')?setModalEditar(true):setModalEliminar(true)
+  }
 
   const handleChange=e=>{
     const {name, value}=e.target;
@@ -35,8 +35,8 @@ function App() {
       ...prevState,
       [name]: value
     }));
-  }  
- 
+  }
+
   const editar=()=>{
     var dataNueva=data;
     dataNueva.map(producto=>{
@@ -54,13 +54,25 @@ function App() {
     setModalEliminar(false);
   }
 
+  const abrirModalInsertar=()=>{
+    setProductoSeleccionado(null);
+    setModalInsertar(true);
+  }
+
+  const insertar =()=>{
+    var valorInsertar=productoSeleccionado;
+    valorInsertar.id=data[data.length-1].id+1;
+    var dataNueva = data;
+    dataNueva.push(valorInsertar);
+    setData(dataNueva);
+    setModalInsertar(false);
+  }
 
   return (
-    
     <div className="App">
       <h2>Listado de Compras del Super (Labo 3 - SED)</h2>
       <br />
-    <button className="btn btn-success" >Agregar Producto</button>
+    <button className="btn btn-success" onClick={()=>abrirModalInsertar()}>Agregar Producto</button>
     <br /><br />
       <table className="table table-bordered">
         <thead>
@@ -78,7 +90,7 @@ function App() {
               <td>{elemento.Producto}</td>
               <td>{elemento.Cantidad}</td>
               <td><button className="btn btn-primary" onClick={()=>seleccionProducto(elemento, 'Editar')}>Editar</button> {"   "} 
-              <button className="btn btn-danger" onClick={()=>seleccionProducto(elemento, 'Eliminar')} >Eliminar</button></td>
+              <button className="btn btn-danger" onClick={()=>seleccionProducto(elemento, 'Eliminar')}>Eliminar</button></td>
             </tr>
           ))
           }
@@ -140,10 +152,10 @@ function App() {
 
       <Modal isOpen={modalEliminar}>
         <ModalBody>
-        ¿Estás seguro que deseas eliminar el producto "{productoSeleccionado && productoSeleccionado.Producto}"?
+          ¿Estás seguro que deseas eliminar el producto "{productoSeleccionado && productoSeleccionado.Producto}"?
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-danger" onClick={()=>eliminar()} >
+          <button className="btn btn-danger" onClick={()=>eliminar()}>
             Sí
           </button>
           <button
@@ -156,7 +168,7 @@ function App() {
       </Modal>
 
 
-        <Modal>
+        <Modal isOpen={modalInsertar}>
         <ModalHeader>
           <div>
             <h3>Insertar producto</h3>
@@ -170,6 +182,7 @@ function App() {
               readOnly
               type="text"
               name="id"
+              value={data[data.length-1].id+1}
             />
             <br />
 
@@ -177,7 +190,7 @@ function App() {
             <input
               className="form-control"
               type="text"
-              name="Producto" 
+              name="Producto"
               value={productoSeleccionado ? productoSeleccionado.Producto: ''}
               onChange={handleChange}
             />
@@ -196,11 +209,12 @@ function App() {
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-primary"
-          >
+          onClick={()=>insertar()}>
             Insertar
           </button>
           <button
             className="btn btn-danger"
+            onClick={()=>setModalInsertar(false)}
           >
             Cancelar
           </button>
