@@ -49,6 +49,11 @@ function App() {
     setModalEditar(false);
   }
 
+  const eliminar =()=>{
+    setData(data.filter(producto=>producto.id!==productoSeleccionado.id));
+    setModalEliminar(false);
+  }
+
 
   return (
     
@@ -73,7 +78,7 @@ function App() {
               <td>{elemento.Producto}</td>
               <td>{elemento.Cantidad}</td>
               <td><button className="btn btn-primary" onClick={()=>seleccionProducto(elemento, 'Editar')}>Editar</button> {"   "} 
-              <button className="btn btn-danger" >Eliminar</button></td>
+              <button className="btn btn-danger" onClick={()=>seleccionProducto(elemento, 'Eliminar')} >Eliminar</button></td>
             </tr>
           ))
           }
@@ -133,16 +138,17 @@ function App() {
       </Modal>
 
 
-      <Modal>
+      <Modal isOpen={modalEliminar}>
         <ModalBody>
-          ¿Estás seguro que deseas eliminar el producto "?
+        ¿Estás seguro que deseas eliminar el producto "{productoSeleccionado && productoSeleccionado.Producto}"?
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-danger" >
+          <button className="btn btn-danger" onClick={()=>eliminar()} >
             Sí
           </button>
           <button
             className="btn btn-secondary"
+            onClick={()=>setModalEliminar(false)}
           >
             No
           </button>
