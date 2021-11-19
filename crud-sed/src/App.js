@@ -14,6 +14,20 @@ function App() {
   ];
 
   const [data, setData] = useState(shopList);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
+  const [modalInsertar, setModalInsertar] = useState(false);
+
+  const [productoSeleccionado, setProductoSeleccionado] = useState({
+    id: '',
+    Producto: '',
+    Cantidad: ''
+  });
+
+  const seleccionProducto=(elemento, caso)=>{
+    setProductoSeleccionado(elemento);
+    (caso==='Editar')?setModalEditar(true):setModalEliminar(true)
+      }
 
 
   return (
@@ -38,7 +52,7 @@ function App() {
               <td>{elemento.id}</td>
               <td>{elemento.Producto}</td>
               <td>{elemento.Cantidad}</td>
-              <td><button className="btn btn-primary" >Editar</button> {"   "} 
+              <td><button className="btn btn-primary" onClick={()=>seleccionProducto(elemento, 'Editar')}>Editar</button> {"   "} 
               <button className="btn btn-danger" >Eliminar</button></td>
             </tr>
           ))
@@ -46,7 +60,7 @@ function App() {
         </tbody>
       </table>
 
-      <Modal >
+      <Modal isOpen={modalEditar}>
         <ModalHeader>
           <div>
             <h3>Editar producto</h3>
@@ -60,6 +74,7 @@ function App() {
               readOnly
               type="text"
               name="id"
+              value={productoSeleccionado && productoSeleccionado.id}
             />
             <br />
 
@@ -68,6 +83,7 @@ function App() {
               className="form-control"
               type="text"
               name="Producto"
+              value={productoSeleccionado && productoSeleccionado.Producto}
             />
             <br />
 
@@ -76,6 +92,7 @@ function App() {
               className="form-control"
               type="text"
               name="Cantidad"
+              value={productoSeleccionado && productoSeleccionado.Cantidad}
             />
             <br />
           </div>
