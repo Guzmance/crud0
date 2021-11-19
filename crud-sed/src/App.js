@@ -27,7 +27,27 @@ function App() {
   const seleccionProducto=(elemento, caso)=>{
     setProductoSeleccionado(elemento);
     (caso==='Editar')?setModalEditar(true):setModalEliminar(true)
+    }
+
+  const handleChange=e=>{
+    const {name, value}=e.target;
+    setProductoSeleccionado((prevState)=>({
+      ...prevState,
+      [name]: value
+    }));
+  }  
+ 
+  const editar=()=>{
+    var dataNueva=data;
+    dataNueva.map(producto=>{
+      if(producto.id===productoSeleccionado.id){
+        producto.Cantidad=productoSeleccionado.Cantidad;
+        producto.Producto=productoSeleccionado.Producto;
       }
+    });
+    setData(dataNueva);
+    setModalEditar(false);
+  }
 
 
   return (
@@ -84,6 +104,7 @@ function App() {
               type="text"
               name="Producto"
               value={productoSeleccionado && productoSeleccionado.Producto}
+              onChange={handleChange}
             />
             <br />
 
@@ -93,16 +114,18 @@ function App() {
               type="text"
               name="Cantidad"
               value={productoSeleccionado && productoSeleccionado.Cantidad}
+              onChange={handleChange}
             />
             <br />
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" >
+          <button className="btn btn-primary" onClick={()=>editar()}>
             Actualizar
           </button>
           <button
             className="btn btn-danger"
+            onClick={()=>setModalEditar(false)}
           >
             Cancelar
           </button>
@@ -148,7 +171,9 @@ function App() {
             <input
               className="form-control"
               type="text"
-              name="Producto"
+              name="Producto" 
+              value={productoSeleccionado ? productoSeleccionado.Producto: ''}
+              onChange={handleChange}
             />
             <br />
 
@@ -157,6 +182,8 @@ function App() {
               className="form-control"
               type="text"
               name="Cantidad"
+              value={productoSeleccionado ? productoSeleccionado.Cantidad: ''}
+              onChange={handleChange}
             />
             <br />
           </div>
